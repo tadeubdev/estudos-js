@@ -44,8 +44,13 @@ stack.push('a');
 stack.push('b');
 stack.push('c');
 
-console.log('Top element:', stack.getTop()); // Output: Top element: c
-console.log('Popped element:', stack.pop()); // Output: Popped element: c
-console.log('New top element:', stack.getTop()); // Output: New top element: b
+// console.log('Top element:', stack.getTop()); // Output: Top element: c
+// console.log('Popped element:', stack.pop()); // Output: Popped element: c
+// console.log('New top element:', stack.getTop()); // Output: New top element: b
+
+while (stack.size > 0) {
+    console.log('popped value: ', stack.pop());
+    console.log('stack after pop: ', stack);
+}
 
 console.log('stack', stack);
