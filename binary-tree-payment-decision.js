@@ -171,3 +171,70 @@ const customer3 = { loyaltyYears: 2, totalSpent: 300, expectedAction: "Sem desco
 console.log('Decisão para customer1:', evaluate(tree3, customer1));
 console.log('Decisão para customer2:', evaluate(tree3, customer2));
 console.log('Decisão para customer3:', evaluate(tree3, customer3));
+
+console.log('');
+
+const mountTreeByArray = (arr) => {
+    const nodesMap = new Map();
+    arr.forEach(item => {
+        if (item.type === "action") {
+            nodesMap.set(item.id, new ActionNode(item.action));
+        } else if (item.type === "decision") {
+            nodesMap.set(item.id, new DecisionNode(item.question));
+        }
+    });
+    arr.forEach(item => {
+        if (item.type === "decision") {
+            const node = nodesMap.get(item.id);
+            node.yesBranch = nodesMap.get(item.yesBranchId);
+            node.noBranch = nodesMap.get(item.noBranchId);
+        }
+    });
+    return nodesMap.get(arr[0].id);
+};
+
+const treeByArray = mountTreeByArray([
+    {
+        id: 1,
+        type: "decision",
+        question: (user) => user.budget > 1000,
+        yesBranchId: 2,
+        noBranchId: 3
+    },
+    {
+        id: 2,
+        type: "action",
+        action: "Enviar proposta de orçamento"
+    },
+    {
+        id: 3,
+        type: "decision",
+        question: (user) => user.isActive,
+        yesBranchId: 4,
+        noBranchId: 5
+    },
+    {
+        id: 4,
+        type: "action",
+        action: "Ativar conta do cliente"
+    },
+    {
+        id: 5,
+        type: "decision",
+        question: (user) => user.isPaymentLate,
+        yesBranchId: 6,
+        noBranchId: 7
+    },
+    {
+        id: 6,
+        type: "action",
+        action: "Enviar lembrete de pagamento"
+    },
+    {
+        id: 7,
+        type: "action",
+        action: "Oferecer upgrade de serviço"
+    }
+]);
+
+console.log('Decisão para user1 com árvore por array:', evaluate(treeByArray, user1));
